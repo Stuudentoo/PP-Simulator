@@ -27,6 +27,9 @@ namespace Simulator
         }
     }
     public uint Size { get; set; } = 3;
-    public string Info => $"{Description} <{Size}>";
+    public string Info
+{
+    get { return $"{Description} [{Size}]"; }
+}
 }
 }
