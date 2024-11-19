@@ -1,5 +1,5 @@
 
-﻿namespace Simulator;
+namespace Simulator;
 
 public class Orc : Creature
 {
