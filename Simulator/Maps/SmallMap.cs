@@ -1,15 +1,25 @@
-namespace Simulator.Maps;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-public abstract class SmallMap : Map
+namespace Simulator.Maps
 {
-
-    private readonly List<Creature>? [,] _fields;
-    protected SmallMap(int sizeX, int sizeY) : base(sizeX, sizeY)
+    public abstract class SmallMap : Map
     {
-        if (sizeX > 20) throw new ArgumentOutOfRangeException(nameof(sizeX), "Szerokość mapy musi wynosić maksymalnie 20.");
-        if (sizeY > 20) throw new ArgumentOutOfRangeException(nameof(sizeY), "Długość mapy musi wynosić maksymalnie 20.");
+        protected SmallMap(int sizeX, int sizeY) : base(sizeX, sizeY)
+        {
+            if (sizeX > 20)
+            {
+                throw new ArgumentOutOfRangeException(nameof(sizeX), "Mapa za duża");
+            }
+            if (sizeY > 20)
+            {
+                throw new ArgumentOutOfRangeException(nameof(sizeY), "Mapa za duża");
+            }
+        }
 
-        _fields = new List<Creature>?[sizeX, sizeY];
+        
     }
-    protected override List<Creature>?[,] Fields => _fields;
 }
