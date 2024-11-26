@@ -1,4 +1,4 @@
-﻿using Simulator.Maps;
+﻿﻿using Simulator.Maps;
 using Simulator;
 namespace SimConsole
 {
@@ -11,7 +11,6 @@ namespace SimConsole
         {
             _map = map;
         }
-
 
         public void Draw()
         {
