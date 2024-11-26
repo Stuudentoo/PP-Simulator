@@ -1,89 +1,93 @@
+﻿
 ﻿using Simulator.Maps;
-
-namespace Simulator;
-
-internal class Program
+using System.Security.Cryptography.X509Certificates;
+namespace Simulator
 {
-    static void Main(string[] args)
+    internal class Program
     {
-        Console.WriteLine("Starting Simulator!\n");
-        Point p = new(10, 25);
-        Console.WriteLine(p.Next(Direction.Right));          
-        Console.WriteLine(p.NextDiagonal(Direction.Right));  
-        Lab5a();
-        Lab5b();
-    }
-    public static void Lab5a()
-    {
-        try
+        
+        static void Lab5a()
         {
-            var rect1 = new Rectangle(2, 2, 5, 7);
-            Console.WriteLine($"{rect1}");
+            Rectangle test1 = new Rectangle(2, 1, 1, 2);
+            Console.WriteLine(test1.ToString());
+            try { Rectangle test2 = new Rectangle(1, 1, 1, 1); }
+            catch (ArgumentException ex) { Console.WriteLine(ex.Message); }
+            Rectangle test4 = new Rectangle(2, 3, 3, 2);
+            Console.WriteLine(test4.ToString());
+            Rectangle test5 = new Rectangle(1, 1, 5, 5);
+            Console.WriteLine(test5.ToString());
+            Point testPoint1 = new Point(3, 3);
+            Console.WriteLine(test5.Contains(testPoint1));
+            Point testPoint2 = new Point(1, 1);
+            Console.WriteLine(test5.Contains(testPoint2));
+            Point testPoint3 = new Point(6, 6);
+            Console.WriteLine(test5.Contains(testPoint3));
+            Point testPoint4 = new Point(0, 3);
+            Console.WriteLine(test5.Contains(testPoint4));
+
+
         }
-        catch (ArgumentException e)
+        static void Lab5b()
         {
-            Console.WriteLine($"{e.Message}");
+            SmallSquareMap testmap1 = new SmallSquareMap(10);
+            try
+            {
+                SmallSquareMap testmap2 = new SmallSquareMap(21);
+            }
+            catch (ArgumentOutOfRangeException ex) { 
+                Console.WriteLine(ex.Message); 
+            }
+            try
+            {
+                SmallSquareMap testmap3 = new SmallSquareMap(4);
+            }
+            catch (ArgumentOutOfRangeException ex) {
+                Console.WriteLine(ex.Message);
+            }
+            Point testPoint1 = new Point(6, 6);
+            Console.WriteLine(testmap1.Exist(testPoint1));
+            Point testPoint2 = new Point(-1, 5);
+            Console.WriteLine(testmap1.Exist(testPoint2));
+            foreach (Direction direction in Enum.GetValues(typeof(Direction)))
+            {
+                Console.WriteLine($"Next method direction (invalid input): {direction} {testmap1.Next(testPoint2, direction)}");
+            }
+            foreach (Direction direction in Enum.GetValues(typeof(Direction)))
+            {
+                Console.WriteLine($"NextDiagonal method direction (invalid input): {direction} {testmap1.NextDiagonal(testPoint2, direction)}");
+
+            }
+            Point testPoint3 = new Point(5, 5);
+            foreach (Direction direction in Enum.GetValues(typeof(Direction)))
+            {
+                Console.WriteLine($"Next method direction: {direction} {testmap1.Next(testPoint3, direction)}");
+            }
+            Point testPoint4 = new Point(4, 4);
+            foreach (Direction direction in Enum.GetValues(typeof(Direction)))
+            {
+                Console.WriteLine($"NextDiagonal method direction: {direction} {testmap1.NextDiagonal(testPoint4, direction)}");
+            }
+          
+            
+           
         }
-        try
+
+
+
+
+
+
+        static void Main(string[] args)
         {
-            var rect2 = new Rectangle(5, 7, 2, 2);
-            Console.WriteLine($"{rect2}");
+            //  Console.WriteLine("Starting Simulator! \n");
+            //  Point p = new(10, 25);
+            //  Console.WriteLine(p.Next(Direction.Right));
+             //Console.WriteLine(p.NextDiagonal(Direction.Right));
+            Lab5a();
+            Lab5b();
+
+
+
         }
-        catch (ArgumentException e)
-        {
-            Console.WriteLine($"{e.Message}");
-        }
-        try
-        {
-            var rect3 = new Rectangle(1, 1, 1, 5);
-            Console.WriteLine($"{rect3}");
-        }
-        catch (ArgumentException e)
-        {
-            Console.WriteLine($"{e.Message}");
-        }
-        try
-        {
-            var p1 = new Point(3, 3);
-            var p2 = new Point(7, 8);
-            var rect4 = new Rectangle(p1, p2);
-            Console.WriteLine($"{rect4}");
-            var testPoint = new Point(5, 5);
-            Console.WriteLine($"{testPoint} {rect4.Contains(testPoint)}");
-        }
-        catch (ArgumentException e)
-        {
-            Console.WriteLine($"{e.Message}");
-        }
-        try
-        {
-            Point p3 = new Point(5, 5);
-            Point p4 = new Point(5, 10);
-            Rectangle rect4 = new Rectangle(p3, p4);
-            Console.WriteLine(rect4);
-        }
-        catch (ArgumentException ex)
-        {
-            Console.WriteLine(ex.Message);
-        }
-    }
-    
-static void Lab5b()
-    {
-        SmallSquareMap map = new SmallSquareMap(18);
-        Console.WriteLine($"Rozmiar mapy: {map.Size}");
-        Point startPoint = new Point(0, 0);
-        Point outsidePoint = new Point(-1, -1);
-        Console.WriteLine($"Czy {startPoint} należy do mapy: {map.Exist(startPoint)}"); 
-        Console.WriteLine($"Czy {outsidePoint} należy do mapy: {map.Exist(outsidePoint)}"); 
-        Point nextRight = map.Next(startPoint, Direction.Right);
-        Point nextUp = map.Next(startPoint, Direction.Up);
-        Console.WriteLine($"Na prawo od {startPoint} znajduje się: {nextRight}"); 
-        Console.WriteLine($"W górę od {startPoint} znajduje się: {nextUp}"); 
-        Point edgePoint = new Point(map.Size - 1, map.Size - 1);
-        Point outOfBounds = map.Next(edgePoint, Direction.Right);
-        Console.WriteLine($"{edgePoint}: {outOfBounds} <- Kraniec mapy");
-        Point diagonal = map.NextDiagonal(startPoint, Direction.Up);
-        Console.WriteLine($"Na skos od {startPoint} znajduje się: {diagonal}"); 
     }
 }

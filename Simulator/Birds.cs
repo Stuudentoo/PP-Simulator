@@ -1,17 +1,14 @@
-namespace Simulator
-{
-    public class Birds : Animals
-    {
-        private bool canFly = true;
-        public bool CanFly { get { return canFly; } init { value = canFly; } }
+﻿namespace Simulator;
 
-        public override string Info
+public class Birds : Animals
+{
+    public bool CanFly { get; set; } = true;
+    public override string Info
+    {
+        get
         {
-            get
-            {
-                string flying_skill = canFly ? "fly+" : "fly-";
-                return $"{Description} ({flying_skill}) <{Size}>";
-            }
+            string flyAbility = CanFly ? "fly+" : "fly-";
+            return $"{Description} ({flyAbility}) <{Size}>";
         }
     }
 }
