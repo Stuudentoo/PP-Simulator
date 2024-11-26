@@ -1,37 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel;
-using Simulator;
+﻿﻿using Simulator;
+namespace TestSimulator;
 
-
-namespace TestSimulator
+public class ValidatorTests
 {
-    public class ValidatorTests
+    [Theory]
+    [InlineData(5, 0, 10, 5)]
+    [InlineData(-5, 0, 10, 0)]
+    [InlineData(15, 0, 10, 10)]
+    public void Limiter_ShouldLimitValueCorrectly(int value, int min, int max, int expected)
     {
-        [Theory]
-        [InlineData(20, 5, 21, 20)]
-        [InlineData(30, 5, 20, 20)]
-        [InlineData(5, 10, 20, 10)]
-        public void Limiter_returnsCorrectValue(int value, int min, int max, int expected)
-        {
-            var result = Validator.Limiter(value, min, max);
-            Assert.Equal(expected, result);
+        Assert.Equal(expected, Validator.Limiter(value, min, max));
+    }
 
-        }
-        [Theory]
-        [InlineData("abc",5,10, '#',"Abc##")]
-        [InlineData("abcdefghijklm",5,10,'#',"Abcdefghij")]
-        [InlineData("hello world", 5,15,'#',"Hello world")]
-        [InlineData("",5,10,'#',"#####")]
-        [InlineData("   abc",5,10,'#',"Abc##")]
-        public void Shortener_returnsCorrectValue(string value, int min, int max, char placeholder, string expected)
-        {
-            var result = Validator.Shortener(value, min, max, placeholder);
-            Assert.Equal(expected, result);
-
-        }
+    [Theory]
+    [InlineData("Test", 2, 10, '#', "Test")]
+    [InlineData("T", 2, 10, '#', "T#")]
+    [InlineData("This is a very long string", 2, 10, '#', "This is a")]
+    [InlineData("", 5, 10, '#', "#####")]
+    [InlineData("   abc", 5, 10, '#', "Abc##")]
+    [InlineData("A             B", 3, 10, '#', "A##")]
+    public void Shortener_ShouldAdjustStringCorrectly(string value, int min, int max, char placeholder, string expected)
+    {
+        Assert.Equal(expected, Validator.Shortener(value, min, max, placeholder));
     }
 }
