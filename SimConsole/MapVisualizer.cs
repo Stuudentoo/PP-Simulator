@@ -1,4 +1,4 @@
-﻿﻿using Simulator.Maps;
+﻿﻿﻿using Simulator.Maps;
 using Simulator;
 namespace SimConsole
 {
@@ -83,4 +83,4 @@ namespace SimConsole
 
 
     }
-}
+}// można zamienic na biblioteke linie 
