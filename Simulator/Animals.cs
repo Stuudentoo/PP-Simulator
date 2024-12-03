@@ -1,22 +1,73 @@
-﻿﻿namespace Simulator;
+﻿﻿﻿
 
-public class Animals
+using Simulator.Maps;
+
+namespace Simulator
 {
-    private string description = "Unknown";
 
-    public required string Description
+    public class Animals : IMappable
     {
-        get => description;
-        init
+        public Map? Map { get; private set; }
+        public Point Position { get; set; }
+        public virtual char Symbol => 'A';
+       
+        public void SetMap(Map map, Point position)
         {
-            description = Validator.Shortener(value, 3, 15, '#');
-            description = char.ToUpper(description[0]) + description.Substring(1).ToLower();
+
+            Map = map;
+            Position = position;
+        }
+
+
+
+        public virtual void Go(Direction direction)
+        {
+            if (Map == null)
+                return;
+
+            Point nextPosition = Map.Next(Position, direction);
+
+   
+            Map.Move((IMappable)this, Position, direction);  
+
+            Position = nextPosition;
+        }
+
+
+
+
+        private string description = "Unknown";
+        public  string Description
+        {
+            get { return description; }
+            init
+            {
+                description = Validator.Shortener(value, 3, 15, '#');
+            }
+        }
+
+        public Animals(string description, int size)
+        {
+            Description = description;
+            Size = size;
+        }
+
+
+        public int Size { get; set; } = 3;
+
+        public override string ToString()
+        {
+            return $"{GetType().Name.ToUpper()}: {Info}";
+        }
+
+      
+     
+
+        public virtual string Info
+        {
+            get { return $"{Description} <{Size}>"; }
         }
     }
-    public uint Size { get; set; } = 3;
-    public virtual string Info => $"{Description} <{Size}>";
-    public override string ToString()
-    {
-        return $"{GetType().Name.ToUpper()}: {Info}";
-    }
+
+
 }

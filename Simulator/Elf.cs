@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿﻿﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
 using System.Linq;
@@ -20,6 +20,7 @@ namespace Simulator
             }
 
         }
+        public override char Symbol => 'E';
 
         public void Sing() {
             counter++;

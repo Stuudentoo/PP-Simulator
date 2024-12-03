@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +11,7 @@ namespace Simulator
 
         private int rage=1;
         private int counter = 0;
+        public override char Symbol => 'O';
         public int Rage
         {
             get { return rage; }
