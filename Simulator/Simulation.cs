@@ -1,4 +1,5 @@
-﻿﻿﻿using Simulator.Maps;
+﻿﻿
+﻿using Simulator.Maps;
 using Simulator;
 
 
@@ -46,18 +47,7 @@ public class Simulation
     /// </summary>
     public string CurrentMoveName
     {
-        get
-        {
-            char move = char.ToLower(Moves[turnIndex]);
-            switch (move)
-            {
-                case 'u': return "up";
-                case 'r': return "right";
-                case 'd': return "down";
-                case 'l': return "left";
-                default: return "";
-            }
-        }
+        get;
     }
     private int turnIndex = 0;
    
@@ -117,20 +107,100 @@ public class Simulation
             Finished = true;
             return;
         }
+
         char moveChar = Moves[turnIndex];
         var directions = DirectionParser.Parse(moveChar.ToString());
 
         if (directions != null && directions.Count > 0)
         {
             var direction = directions[0];
-            CurrentCreature.Go(direction);
+            var creature = CurrentCreature;
+
+            var currentIndex = turnIndex % Positions.Count;
+            var currentPosition = Positions[currentIndex];
+
+            Point newPosition = currentPosition;
+
+            if (creature is Birds bird && bird.CanFly)
+            {
+           
+                newPosition = Map.Next(currentPosition, direction);
+                newPosition = Map.Next(newPosition, direction); 
+
+            
+                if (!Map.Exist(newPosition))
+                {
+                    switch (direction)
+                    {
+                        case Direction.Up: direction = Direction.Down; break;
+                        case Direction.Down: direction = Direction.Up; break;
+                        case Direction.Left: direction = Direction.Right; break;
+                        case Direction.Right: direction = Direction.Left; break;
+                        default: break;
+                    }
+
+           
+                    newPosition = Map.Next(currentPosition, direction);
+                    newPosition = Map.Next(newPosition, direction); 
+
+                  
+                    if (!Map.Exist(newPosition))
+                    {
+                        Map.Remove(creature, currentPosition);
+                        Positions.RemoveAt(currentIndex);
+                        Creatures.RemoveAt(currentIndex);
+                        turnIndex--;
+                        if (Creatures.Count == 0) Finished = true;
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                // Normalny ruch dla innych stworów
+                newPosition = Map.Next(currentPosition, direction);
+
+                // Odbicie w przypadku wyjścia poza mapę
+                if (!Map.Exist(newPosition))
+                {
+                    switch (direction)
+                    {
+                        case Direction.Up: direction = Direction.Down; break;
+                        case Direction.Down: direction = Direction.Up; break;
+                        case Direction.Left: direction = Direction.Right; break;
+                        case Direction.Right: direction = Direction.Left; break;
+                        default: break;
+                    }
+
+                    newPosition = Map.Next(currentPosition, direction);
+
+                    if (!Map.Exist(newPosition))
+                    {
+                        Map.Remove(creature, currentPosition);
+                        Positions.RemoveAt(currentIndex);
+                        Creatures.RemoveAt(currentIndex);
+                        turnIndex--;
+                        if (Creatures.Count == 0) Finished = true;
+                        return;
+                    }
+                }
+            }
+
+            // Przemieszczamy stworzenie
+            Map.Remove(creature, currentPosition);
+            Map.Add(creature, newPosition);
+
+            // Zaktualizowanie pozycji w liście
+            Positions[currentIndex] = newPosition;
         }
 
         turnIndex++;
+       
 
         if (turnIndex >= Moves.Length)
         {
             Finished = true;
         }
     }
+
 }
